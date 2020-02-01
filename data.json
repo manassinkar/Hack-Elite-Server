@@ -1,0 +1,5 @@
+{
+    "DataBaseURL": "mongodb://localhost:27017/HackElite",
+    "email": "aurorchief@gmail.com",
+    "password": "random123random"
+}
