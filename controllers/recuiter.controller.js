@@ -30,9 +30,9 @@ exports.login = (req,res) =>
     {
         Recruiter.findOne({ email: req.body.email },(err,ans) =>
         {
-            if(er)
+            if(err)
             {
-                res.status(500).send({ message: "Error while fetching Recruiter Information", error: er });
+                res.status(500).send({ message: "Error while fetching Recruiter Information", error: err });
             }
             else
             {
@@ -69,9 +69,9 @@ exports.viewProfile = (req,res) =>
     {
         Recruiter.findOne({ email: req.body.email },(err,ans) =>
         {
-            if(er)
+            if(err)
             {
-                res.status(500).send({ message: "Error while fetching Recruiter Information", error: er });
+                res.status(500).send({ message: "Error while fetching Recruiter Information", error: err });
             }
             else
             {

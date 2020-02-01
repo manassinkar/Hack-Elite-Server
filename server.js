@@ -24,11 +24,12 @@ app.listen(PORT, () => { mongoose.connect(CONNECTION_URL, { useCreateIndex: true
 
 app.use(cors());
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/user',require('./routes/user.route'));
 app.use('/shortlist',require('./routes/shortlist.route'));
+app.use('/recruiter',require('./routes/recruiter.route'));
 
 app.get('/test',(req,res) =>
 {

@@ -9,33 +9,40 @@ var { PythonShell } = require('python-shell');
 
 exports.register = (req,res) =>
 {
-    if(req.body.resume)
+    if(req.file && req.body.email && req.body.password && req.body.firstName && req.body.lastName)
     {
-        var f = fs.readFileSync(req.body.resume.path);
-        // var f = fs.readFileSync('./x.pdf');
+        console.log("API Called");
+        var f = fs.readFileSync(req.file.path);
         var encode_file = f.toString('base64');
-        const myPythonScriptPath = "x.py";
+        const myPythonScriptPath = "predict.py";
         var pyshell = new PythonShell(myPythonScriptPath);
         pdfParser(f).then((data) =>
         {
             pyshell.send(JSON.stringify({text: data.text}));
             pyshell.on('message',(message) =>
             {
-                var data = JSON.parse(message);
+                message = JSON.parse(message);
+                console.log(message);
+                var file = {
+                    filename: req.file.filename,
+                    contentType: req.file.mimetype,
+                    file: encode_file
+                }
                 let user = new User({
                     email: req.body.email,
                     password: req.body.password,
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
-                    resume: encode_file,
-                    skills: data.skills,
-                    category: data.category
+                    resumeFile: file,
+                    skills: message.skills,
+                    category: message.category
                 });
-                user.save((err)=>
+                console.log(user);
+                User.insertMany(user,(er)=>
                 {
-                    if(err)
+                    if(er)
                     {
-                        res.status(500).send({ message: "Registeration Failed", error:err });
+                        res.status(500).send({ message: "Registeration Failed", error:er });
                     }
                     else
                     {
@@ -43,10 +50,12 @@ exports.register = (req,res) =>
                     }
                 });
             });
-            pyshell.end(function (err) {
-                if (err){
+            pyshell.end((err) =>
+            {
+                if(err)
+                {
                     console.log(err);
-                };
+                }
             });
         });
     }
@@ -62,9 +71,9 @@ exports.login = (req,res) =>
     {
         User.findOne({ email: req.body.email },(err,ans) =>
         {
-            if(er)
+            if(err)
             {
-                res.status(500).send({ message: "Error while fetching User Information", error: er });
+                res.status(500).send({ message: "Error while fetching User Information", error: err });
             }
             else
             {
@@ -101,9 +110,9 @@ exports.viewProfile = (req,res) =>
     {
         User.findOne({ email: req.body.email },(err,ans) =>
         {
-            if(er)
+            if(err)
             {
-                res.status(500).send({ message: "Error while fetching User Information", error: er });
+                res.status(500).send({ message: "Error while fetching User Information", error: err });
             }
             else
             {
