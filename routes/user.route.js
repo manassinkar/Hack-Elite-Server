@@ -13,8 +13,10 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 router.post('/login',uC.login);
-router.post('/register',upload.single('resume'),uC.register);
+router.post('/register',upload.single('file'),uC.register);
 router.post('/test',uC.testMail);
 router.get('/viewProfile',uC.viewProfile);
+router.get('/getCategories',uC.getUniqueCategory);
+router.get('/usersByCategory',uC.getUsersByCategory)
 
 module.exports = router;

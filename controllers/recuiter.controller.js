@@ -3,6 +3,7 @@ let Shortlist = require('../models/shortlist.model');
 let User = require('../models/user.model');
 var mailer = require('nodemailer');
 var data = require('../data.json');
+let bcrypt = require('bcryptjs');
 
 exports.register = (req,res) =>
 {

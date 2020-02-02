@@ -168,7 +168,7 @@ totalFeatures = hstack([WordFeatures, CharFeatures])
 word_vectorizer = TfidfVectorizer(
     sublinear_tf=True,
     stop_words='english',
-    max_features=1500)
+    max_features=500)
 word_vectorizer.fit(requiredText)
 WordFeatures = word_vectorizer.transform(requiredText)
 

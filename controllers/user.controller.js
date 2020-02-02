@@ -11,7 +11,7 @@ exports.register = (req,res) =>
 {
     if(req.file && req.body.email && req.body.password && req.body.firstName && req.body.lastName)
     {
-        console.log("API Called");
+        console.log("API Called",req.boyd);
         var f = fs.readFileSync(req.file.path);
         var encode_file = f.toString('base64');
         const myPythonScriptPath = "predict.py";
@@ -22,7 +22,6 @@ exports.register = (req,res) =>
             pyshell.on('message',(message) =>
             {
                 message = JSON.parse(message);
-                console.log(message);
                 var file = {
                     filename: req.file.filename,
                     contentType: req.file.mimetype,
@@ -37,12 +36,11 @@ exports.register = (req,res) =>
                     skills: message.skills,
                     category: message.category
                 });
-                console.log(user);
-                User.insertMany(user,(er)=>
+                user.save((er)=>
                 {
                     if(er)
                     {
-                        res.status(500).send({ message: "Registeration Failed", error:er });
+                        res.status(401).send({ message: "Registeration Failed", error:er });
                     }
                     else
                     {
@@ -131,6 +129,36 @@ exports.viewProfile = (req,res) =>
     {
         res.status(404).send({ message: "Required Data not Received" });
     }
+};
+
+exports.getUniqueCategory = (req,res) =>
+{
+    User.distinct('category',{},(err,ans) =>
+    {
+        if(err)
+        {
+            res.status(500).send({ message: "Error while fetching categories" });
+        }
+        else
+        {
+            res.status(200).send(ans);
+        }
+    });
+};
+
+exports.getUsersByCategory = (req,res) =>
+{
+    User.find({ category: req.query.category },{ password: 0 },(err,ans) =>
+    {
+        if(err)
+        {
+            res.status(500).send({ message: "Error while fetching Candidates" });
+        }
+        else
+        {
+            res.status(200).send(ans);
+        }
+    });
 };
 
 exports.testMail = (req,res) =>

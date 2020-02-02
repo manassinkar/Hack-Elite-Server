@@ -18,20 +18,11 @@ var user = new Schema({
     skills: {type: [String], required: true}
 });
 
-user.pre("insertOne", function(next)
-{
-    console.log(this);
-    this.basicDetails.firstName = this.basicDetails.firstName.charAt(0).toUpperCase()+this.basicDetails.firstName.slice(1).toLowerCase();
-    this.basicDetails.lastName = this.basicDetails.lastName.charAt(0).toUpperCase()+this.basicDetails.lastName.slice(1).toLowerCase();
-    this.password = bcrypt.hashSync(this.password,10);
-    next();
-});
-
 user.pre("save", function(next)
 {
     console.log(this);
-    this.basicDetails.firstName = this.basicDetails.firstName.charAt(0).toUpperCase()+this.basicDetails.firstName.slice(1).toLowerCase();
-    this.basicDetails.lastName = this.basicDetails.lastName.charAt(0).toUpperCase()+this.basicDetails.lastName.slice(1).toLowerCase();
+    this.firstName = this.firstName.charAt(0).toUpperCase()+this.firstName.slice(1).toLowerCase();
+    this.lastName = this.lastName.charAt(0).toUpperCase()+this.lastName.slice(1).toLowerCase();
     this.password = bcrypt.hashSync(this.password,10);
     next();
 });

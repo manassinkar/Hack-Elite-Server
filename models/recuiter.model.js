@@ -11,7 +11,15 @@ var recruiter = new Schema({
 recruiter.pre("save", function(next)
 {
     console.log(this);
-    this.basicDetails.companyName = this.basicDetails.companyName.charAt(0).toUpperCase()+this.basicDetails.companyName.slice(1).toLowerCase();
+    this.companyName = this.companyName.charAt(0).toUpperCase()+this.companyName.slice(1).toLowerCase();
+    this.password = bcrypt.hashSync(this.password,10);
+    next();
+});
+
+recruiter.pre("insertMany", function(next)
+{
+    console.log(this);
+    this.companyName = this.companyName.charAt(0).toUpperCase()+this.companyName.slice(1).toLowerCase();
     this.password = bcrypt.hashSync(this.password,10);
     next();
 });
