@@ -17,6 +17,7 @@ router.post('/register',upload.single('file'),uC.register);
 router.post('/test',uC.testMail);
 router.get('/viewProfile',uC.viewProfile);
 router.get('/getCategories',uC.getUniqueCategory);
-router.get('/usersByCategory',uC.getUsersByCategory)
+router.get('/usersByCategory',uC.getUsersByCategory);
+router.get('/viewShortlist',uC.viewShortlist);
 
 module.exports = router;

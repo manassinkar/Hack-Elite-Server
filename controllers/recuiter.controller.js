@@ -43,7 +43,7 @@ exports.login = (req,res) =>
                     {
                         if(success)
                         {
-                            res.status(200).send({ email: ans.email, firstName: ans.firstName, lastName: ans.lastName, category: ans.category });
+                            res.status(200).send({ email: ans.email, companyName: ans.companyName });
                         }
                         else
                         {
@@ -147,6 +147,7 @@ exports.shortlisting = (req,res) =>
                     accepted: false,
                     rejected: false
                 });
+                console.log(shortlist);
                 shortlist.save((er)=>
                 {
                     if(er)
@@ -173,6 +174,21 @@ exports.shortlisting = (req,res) =>
             {
                 res.status(404).send({ message: "User Doesn't Exist, Please Register" });
             }
+        }
+    });
+};
+
+exports.viewShortlist = (req,res) =>
+{
+    Shortlist.find({ companyEmail: req.query.email },(err,ans) =>
+    {
+        if(err)
+        {
+            res.status(500).send({ message: "Error while fetching Recruiter Information", error: err });
+        }
+        else
+        {
+            res.status(200).send(ans);
         }
     });
 };

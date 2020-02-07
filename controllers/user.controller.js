@@ -194,3 +194,18 @@ exports.testMail = (req,res) =>
         }
     });
 };
+
+exports.viewShortlist = (req,res) =>
+{
+    Shortlist.find({ userEail: req.query.email },(err,ans) =>
+    {
+        if(err)
+        {
+            res.status(500).send({ message: "Error while fetching Recruiter Information", error: err });
+        }
+        else
+        {
+            res.status(200).send(ans);
+        }
+    });
+};
